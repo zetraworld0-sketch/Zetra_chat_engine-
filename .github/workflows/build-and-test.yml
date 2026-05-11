@@ -1,87 +1,44 @@
-name: Build and test
+name: Build APK
 
 on:
-  push:
-    branches:
-      - develop
-      - main
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+push:
+branches:
+- develop
+- main
 
 jobs:
-  debug_build:
-    name: Debug build
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v6.0.2
-      - uses: GetStream/android-ci-actions/actions/setup-java@main
-      - name: Build
-        run: ./gradlew assembleDebug
+build:
+runs-on: ubuntu-22.04
 
-  release_build:
-    name: Release build
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v6.0.2
-      - uses: GetStream/android-ci-actions/actions/setup-java@main
-      - name: Build
-        run: ./gradlew assembleRelease
+```
+steps:
+  - name: Checkout
+    uses: actions/checkout@v4
 
-  tests:
-    name: Tests
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v6.0.2
-        with:
-          fetch-depth: 0 # fetch all history for sonar analysis
-      - uses: GetStream/android-ci-actions/actions/setup-java@main
-      - name: Unit tests
-        run: ./gradlew :testCoverage
-      - name: Upload test results
-        uses: actions/upload-artifact@v7.0.1
-        if: failure()
-        with:
-          name: testResults
-          path: ./**/build/reports/tests/**
-      - uses: GetStream/android-ci-actions/actions/setup-ruby@main
-      - name: Sonar
-        run: bundle exec fastlane run_sonar_analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  - name: Setup Java 21
+    uses: actions/setup-java@v4
+    with:
+      distribution: temurin
+      java-version: 21
 
-  size_check_xml:
-    name: Size Check XML
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v6.0.2
-      - uses: GetStream/android-ci-actions/actions/setup-java@main
-      - name: build demo debug
-        run: ./gradlew stream-chat-android-ui-components-sample:assembleDemoDebug
-      - name: Upload artifact to Emerge
-        uses: EmergeTools/emerge-upload-action@v1.2.2
-        with:
-          artifact_path: ./stream-chat-android-ui-components-sample/build/outputs/apk/demo/debug/stream-chat-android-ui-components-sample-demo-debug.apk
-          emerge_api_key: ${{ secrets.EMERGE_TOOLS_API_KEY }}
-          build_type: debug
+  - name: Setup Android SDK
+    uses: android-actions/setup-android@v3
 
-  size_check_compose:
-    name: Size Check Compose
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v6.0.2
-      - uses: GetStream/android-ci-actions/actions/setup-java@main
-      - name: build debug
-        run: ./gradlew stream-chat-android-compose-sample:assembleDebug
-      - name: Upload artifact to Emerge
-        uses: EmergeTools/emerge-upload-action@v1.2.2
-        with:
-          artifact_path: ./stream-chat-android-compose-sample/build/outputs/apk/demo/debug/stream-chat-android-compose-sample-demo-debug.apk
-          emerge_api_key: ${{ secrets.EMERGE_TOOLS_API_KEY }}
-          build_type: debug
+  - name: Accept SDK licenses
+    run: yes | sdkmanager --licenses
+
+  - name: Grant execute permission
+    run: chmod +x gradlew
+
+  - name: Clean project
+    run: ./gradlew clean
+
+  - name: Build Debug APK
+    run: ./gradlew assembleDebug
+
+  - name: Upload APK
+    uses: actions/upload-artifact@v4
+    with:
+      name: debug-apk
+      path: "**/build/outputs/apk/debug/*.apk"
+```
