@@ -118,7 +118,7 @@ We also maintain a dedicated repository for fully-fledged sample applications at
 
 Here are some of the features that the SDK supports out-of-the-box:
 
-- Channels list UI
+- Channel list UI
 - Channel UI
 - Message reactions
 - Link previews
