@@ -6,12 +6,18 @@ on:
   pull_request:
     branches: [ develop, main ]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: Set up Java 21
         uses: actions/setup-java@v4
@@ -25,6 +31,19 @@ jobs:
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug --no-daemon
+
+      - name: Commit SDK Size Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "Update SDK sizes"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
