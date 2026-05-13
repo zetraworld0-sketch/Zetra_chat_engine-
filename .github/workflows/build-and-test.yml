@@ -1,50 +1,30 @@
-name: Build APKs
+name: Build Netscape APK
 
 on:
   push:
-    branches:
-      - develop
-      - main
+    branches: [ develop, main ]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Java 21
+      - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 21
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle' # Automatically caches gradle dependencies
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug --no-daemon # No-daemon saves memory on the server
+        env:
+          JAVA_OPTS: "-Xmx2g" # Limits memory to prevent crashes
 
-      - name: Accept SDK licenses
-        run: yes | sdkmanager --licenses
-
-      - name: Grant execute permission
-        run: chmod +x gradlew
-
-      - name: Clean project
-        run: ./gradlew clean
-
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug
-
-      - name: Upload Debug APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: debug-apk
-          path: "**/build/outputs/apk/debug/*.apk"
-
-      - name: Build Release APK
-        run: ./gradlew assembleRelease
-
-      - name: Upload Release APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-apk
-          path: "**/build/outputs/apk/release/*.apk"
+          name: netscape-chat-debug
+          path: stream-chat-android-ui-components-sample/build/outputs/apk/debug/*.apk
