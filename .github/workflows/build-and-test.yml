@@ -3,6 +3,8 @@ name: Build Netscape APK
 on:
   push:
     branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
 
 jobs:
   build:
@@ -16,15 +18,16 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: 'gradle' # Automatically caches gradle dependencies
+          cache: 'gradle'
 
-      - name: Build with Gradle
-        run: ./gradlew assembleDebug --no-daemon # No-daemon saves memory on the server
-        env:
-          JAVA_OPTS: "-Xmx2g" # Limits memory to prevent crashes
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      - name: Upload APK
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: netscape-chat-debug
-          path: stream-chat-android-ui-components-sample/build/outputs/apk/debug/*.apk
+          name: Netscape-Debug-Build
+          path: stream-chat-android-ui-components-sample/build/outputs/apk/demo/debug/*.apk
