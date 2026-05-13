@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- The main application theme -->
+    <!-- Main App Theme -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- This now uses the WhatsApp Green you set in colors.xml -->
         <item name="colorPrimary">@color/stream_color_primary</item>
         <item name="colorPrimaryDark">@color/stream_color_primary_dark</item>
         <item name="colorAccent">@color/stream_color_accent</item>
-        
-        <!-- Status bar color for that full WhatsApp look -->
         <item name="android:statusBarColor">@color/stream_color_primary_dark</item>
-        
         <item name="streamUiTheme">@style/StreamTheme</item>
     </style>
 
-    <!-- Customizing the Stream Chat UI components -->
+    <!-- Netscape Branding Logic -->
     <style name="StreamTheme" parent="@style/StreamUiTheme">
+        <!-- LINKING YOUR LOGO HERE -->
+        <item name="streamUiChannelListTitleIcon">@drawable/ic_netscape_logo</item>
+        
+        <!-- WhatsApp Colors -->
+        <item name="streamUiMessageListBackgroundColor">#ECE5DD</item>
+        <item name="streamUiToolbarBackgroundColor">@color/whatsapp_teal</item>
+        
         <item name="streamUiChannelActionsDialogStyle">@style/ChannelActionsDialogTheme</item>
         <item name="streamUiAudioRecordPlayerViewStyle">@style/AudioRecordPlayerViewTheme</item>
-        
-        <!-- Netscape Customization: Message Bubbles -->
-        <!-- This sets the background of the chat list to that classic WhatsApp beige -->
-        <item name="streamUiMessageListBackgroundColor">#ECE5DD</item>
     </style>
 
-    <style name="ChannelActionsDialogTheme" parent="StreamUi.ChannelList.ActionsDialog" >
+    <style name="ChannelActionsDialogTheme" parent="StreamUi.ChannelList.ActionsDialog">
         <item name="streamUiChannelActionsViewInfoEnabled">true</item>
     </style>
 
