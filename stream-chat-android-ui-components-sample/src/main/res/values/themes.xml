@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Main App Theme -->
+
+    <!-- 1. Main Application Theme -->
+    <!-- This is the base for your entire app, including Netscape Sovereign Hub -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/stream_color_primary</item>
         <item name="colorPrimaryDark">@color/stream_color_primary_dark</item>
         <item name="colorAccent">@color/stream_color_accent</item>
-        <item name="android:statusBarColor">@color/stream_color_primary_dark</item>
-        <item name="streamUiTheme">@style/StreamTheme</item>
+        
+        <!-- Link the main Stream Theme -->
+        <item name="streamUiTheme">@style/ZetraStreamTheme</item>
     </style>
 
-    <!-- Corrected Stream UI Components Theme -->
-    <style name="StreamTheme" parent="@style/StreamUiTheme">
-        <!-- 1. WhatsApp Background Color (Removed 'Color' from the end) -->
-        <item name="streamUiMessageListBackground">#ECE5DD</item>
+    <!-- 2. The Global Stream Theme -->
+    <!-- This links the sub-styles for each component -->
+    <style name="ZetraStreamTheme" parent="@style/StreamUiTheme">
+        <!-- Links the custom style for the Message List -->
+        <item name="streamUiMessageListStyle">@style/ZetraMessageListStyle</item>
         
-        <!-- 2. WhatsApp Toolbar Color (Corrected name) -->
-        <item name="streamUiToolbarBackground">@color/whatsapp_teal</item>
-        
-        <!-- 3. Netscape Logo (Corrected name) -->
-        <item name="streamUiChannelListHeaderTitleIcon">@drawable/ic_netscape_logo</item>
+        <!-- Links the custom style for the Channel/Toolbar Header -->
+        <item name="streamUiChannelListHeaderStyle">@style/ZetraHeaderStyle</item>
 
+        <!-- Existing Zetra Lab customizations -->
         <item name="streamUiChannelActionsDialogStyle">@style/ChannelActionsDialogTheme</item>
         <item name="streamUiAudioRecordPlayerViewStyle">@style/AudioRecordPlayerViewTheme</item>
     </style>
 
+    <!-- 3. Component Specific Styles (Resolves the "Attribute Not Found" errors) -->
+
+    <!-- Fixes the WhatsApp Background Color -->
+    <style name="ZetraMessageListStyle" parent="StreamUi.MessageList">
+        <item name="android:background">#ECE5DD</item>
+    </style>
+
+    <!-- Fixes the WhatsApp Teal Toolbar and Netscape Logo -->
+    <style name="ZetraHeaderStyle" parent="StreamUi.ChannelList.Header">
+        <item name="streamUiHeaderBackground">@color/whatsapp_teal</item>
+        <item name="streamUiHeaderTitleIcon">@drawable/ic_netscape_logo</item>
+    </style>
+
+    <!-- 4. Existing Support Styles -->
     <style name="ChannelActionsDialogTheme" parent="StreamUi.ChannelList.ActionsDialog">
         <item name="streamUiChannelActionsViewInfoEnabled">true</item>
     </style>
@@ -31,4 +47,5 @@
     <style name="AudioRecordPlayerViewTheme" parent="StreamUi.AudioRecordPlayerView">
         <item name="streamUiAudioRecordPlayerFileIconContainerVisible">false</item>
     </style>
+
 </resources>
