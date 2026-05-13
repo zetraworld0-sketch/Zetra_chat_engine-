@@ -9,15 +9,17 @@
         <item name="streamUiTheme">@style/StreamTheme</item>
     </style>
 
-    <!-- Netscape Branding Logic -->
+    <!-- Corrected Stream UI Components Theme -->
     <style name="StreamTheme" parent="@style/StreamUiTheme">
-        <!-- LINKING YOUR LOGO HERE -->
-        <item name="streamUiChannelListTitleIcon">@drawable/ic_netscape_logo</item>
+        <!-- 1. WhatsApp Background Color (Removed 'Color' from the end) -->
+        <item name="streamUiMessageListBackground">#ECE5DD</item>
         
-        <!-- WhatsApp Colors -->
-        <item name="streamUiMessageListBackgroundColor">#ECE5DD</item>
-        <item name="streamUiToolbarBackgroundColor">@color/whatsapp_teal</item>
+        <!-- 2. WhatsApp Toolbar Color (Corrected name) -->
+        <item name="streamUiToolbarBackground">@color/whatsapp_teal</item>
         
+        <!-- 3. Netscape Logo (Corrected name) -->
+        <item name="streamUiChannelListHeaderTitleIcon">@drawable/ic_netscape_logo</item>
+
         <item name="streamUiChannelActionsDialogStyle">@style/ChannelActionsDialogTheme</item>
         <item name="streamUiAudioRecordPlayerViewStyle">@style/AudioRecordPlayerViewTheme</item>
     </style>
