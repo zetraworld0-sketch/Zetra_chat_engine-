@@ -22,7 +22,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # This is the secret to speed: it handles all the caching for you
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -31,7 +30,6 @@ jobs:
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      # Added flags to make the build finish as fast as possible
       - name: Build Debug APK
         run: ./gradlew assembleDebug --no-daemon --parallel --build-cache --configuration-cache
 
